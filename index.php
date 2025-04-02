@@ -31,11 +31,9 @@ if (array_key_exists("url", $_GET)) {
     $url = $_GET["url"];
 }
 
-$parts = explode("/", $url);
-$branch = isset($parts[0]) ? $parts[0] : "";
-$loading_msg = isset($parts[1]) ? $parts[1] : "";
-$username = "sunnypilot";
+list($username, $branch, $loading_msg) = explode("/", $url);  # todo: clip these strings at the max length in index (to show up on the webpage)
 
+$username = substr(strtolower($username), 0, 39);  # max GH username length
 $branch = substr(trim($branch), 0, 255);  # max GH branch
 $branch = $branch == "_" ? "" : $branch;
 $loading_msg = substr(trim($loading_msg), 0, 39);
@@ -59,15 +57,16 @@ $aliases = [new Alias("dragonpilot-community", "release3", ["dragonpilot", "dp"]
             new Alias("sshane", "SA-master", ["shane", "smiskol", "sa", "sshane"], "", "Stock Additions"),
 	    new Alias("sunnyhaibin", "prod-c3", ["sunnypilot", "sp", "sunnyhaibin"], "", "sunnypilot")];
 foreach ($aliases as $al) {
-    if ($al->name === $username) {
+    if (in_array($username, $al->aliases)) {
+        $username = $al->name;
         if ($branch == "") $branch = $al->default_branch;  # if unspecified, use default
         if ($loading_msg == "") $loading_msg = $al->loading_msg;
-        if ($al->repo != "") $repo_name = $al->repo;
+        if ($al->repo != "") $repo_name = $al->repo;  # in case the fork's name isn't openpilot and redirection doesn't work
         break;
     }
 }
 if ($loading_msg == "") {  # if not an alias with custom msg and not specified use username
-    $loading_msg = "sunnypilot";
+    $loading_msg = $username;
 } else {  # make sure we encode spaces, neos setup doesn't like spaces (branch and username shouldn't have spaces)
 	$loading_msg = str_replace(" ", "%20", $loading_msg);
 }
@@ -75,7 +74,12 @@ if ($loading_msg == "") {  # if not an alias with custom msg and not specified u
 logData();
 
 $build_script = IS_NEOS ? "/build_neos.php" : "/build_agnos.php";
-if (IS_NEOS or IS_AGNOS or IS_WGET) {  # if NEOS or wget serve file immediately
+if (IS_NEOS or IS_AGNOS or IS_WGET) {  # if NEOS or wget serve file immediately. commaai/stock if no username provided
+    if ($username == "") {
+        $username = "commaai";
+        $branch = DEFAULT_STOCK_BRANCH;
+        $loading_msg = "openpilot";
+    }
     header("Location: " . BASE_DIR . $build_script . "?username=" . $username . "&branch=" . $branch . "&loading_msg=" . $loading_msg);
     return;
 }
