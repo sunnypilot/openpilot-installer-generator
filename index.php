@@ -74,7 +74,7 @@ if ($loading_msg == "") {  # if not an alias with custom msg and not specified u
 
 logData();
 
-$build_script = IS_NEOS ? "/build_neos.php" : "/build_agnos.php";
+$build_script = IS_NEOS ? "build_neos.php" : "build_agnos.php";
 if (IS_NEOS or IS_AGNOS or IS_WGET) {  # if NEOS or wget serve file immediately
     header("Location: " . BASE_DIR . $build_script . "?username=" . $username . "&branch=" . $branch . "&loading_msg=" . $loading_msg);
     return;
