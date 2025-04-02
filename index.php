@@ -1,16 +1,22 @@
 <?php
 error_reporting(E_ALL ^ E_WARNING);
 
+error_log("Request received: URL={$_SERVER['REQUEST_URI']}, User-Agent={$_SERVER['HTTP_USER_AGENT']}");
+
 # Constants
 define("USER_AGENT", $_SERVER['HTTP_USER_AGENT']);
 define("IS_NEOS", str_contains(USER_AGENT, "NEOSSetup"));
-define("IS_AGNOS", str_contains(USER_AGENT, "AGNOSSetup"));
+define("IS_AGNOS", strpos(USER_AGENT, "AGNOSSetup") !== false);
 define("IS_WGET", str_contains(USER_AGENT, "Wget"));
 # Use release2 if NEOS, else release3 (careful! wget assumes comma three)
 define("DEFAULT_STOCK_BRANCH", IS_NEOS ? "release2" : "release3");
 
 define("WEBSITE_URL", "https://installer.sunnypilot.ai");
 define("BASE_DIR", "");
+
+if (strpos(USER_AGENT, "AGNOSSetup") !== false) {
+    error_log("AGNOS device detected with User-Agent: " . USER_AGENT);
+}
 
 function logData() {
     global $url;

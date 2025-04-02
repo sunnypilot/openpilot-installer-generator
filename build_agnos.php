@@ -1,4 +1,17 @@
 <?php
+
+error_log("AGNOS request received: username={$_GET["username"]}, branch={$_GET["branch"]}, loading_msg={$_GET["loading_msg"]}");
+
+$binary_path = getcwd() . "/installer_openpilot_agnos";
+if (!file_exists($binary_path)) {
+    error_log("Error: installer_openpilot_agnos binary not found at $binary_path");
+    header("HTTP/1.1 500 Internal Server Error");
+    echo "Error: Installer binary not found.";
+    exit;
+}
+
+error_log("Reading binary file from $binary_path");
+
 # Constants
 define("E", "27182818284590452353602874713526624977572470936999595");  # placeholder for username, includes "openpilot" repo name
 define("PI", "314159265358979323846264338327950288419");  # placeholder for loading msg
