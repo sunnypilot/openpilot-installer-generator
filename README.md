@@ -18,7 +18,7 @@ Where `username` is the required username of the fork, `branch` is the branch to
 The main `index.php` file looks at your user-agent to decide which installer to serve. If `NEOSSetup` is present in your user-agent, then the Android-based installer is served. If `AGNOSSetup` is present, then it serves the Ubuntu-based installer for the comma three.
 
 ## Aliases
-Defined in the [index.php](fork/index.php) file, aliases allow for more quickly installing a fork with a long username.
+Defined in the [index.php](index.php) file, aliases allow for more quickly installing a fork with a long username.
 
 - To install [dragonpilot](https://github.com/dragonpilot-community/dragonpilot), you can simply use the following URL which uses the `devel-i18n` branch by default: https://smiskol.com/fork/dp
 - To install [Stock Additions](https://github.com/sshane/openpilot), my fork, enter the URL: https://smiskol.com/fork/shane
