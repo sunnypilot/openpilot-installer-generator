@@ -1,6 +1,12 @@
 <?php
 error_reporting(E_ALL ^ E_WARNING);
 
+$debug_log = fopen("debug.log", "a");
+fwrite($debug_log, "Request received: " . date("Y-m-d H:i:s") . "\n");
+fwrite($debug_log, "User-Agent: " . USER_AGENT . "\n");
+fwrite($debug_log, "IS_AGNOS: " . (IS_AGNOS ? "true" : "false") . "\n");
+fwrite($debug_log, "URL: " . $url . "\n");
+
 # Constants
 define("USER_AGENT", $_SERVER['HTTP_USER_AGENT']);
 define("IS_NEOS", str_contains(USER_AGENT, "NEOSSetup"));
