@@ -73,7 +73,7 @@ if ($loading_msg == "") {  # if not an alias with custom msg and not specified u
 
 logData();
 
-$build_script = IS_NEOS ? "/build_neos.php" : "/build_agnos.php";
+$build_script = IS_NEOS ? "build_neos.php" : "build_agnos.php";
 if (IS_NEOS or IS_AGNOS or IS_WGET) {  # if NEOS or wget serve file immediately. commaai/stock if no username provided
     if ($username == "") {
         $username = "commaai";
