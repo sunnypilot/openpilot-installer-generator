@@ -104,7 +104,7 @@ echo '<h3 style="position: absolute; bottom: 0; left: 0; width: 100%; text-align
 if ($username == "") {
     echo '<h3 style="color: #30323D;">🎉 now supports comma three! 🎉<h3>';
     echo "</br><h2>Enter this URL on your device during setup with the format:</h2>";
-    echo "<h2><a href='" . BASE_DIR . "/release-c3'><span>" . WEBSITE_URL . BASE_DIR . "/branch</span></a></h2>";
+    echo "<h2><a href='" . BASE_DIR . "/sshane/SA-master'><span>" . WEBSITE_URL . BASE_DIR . "/username/branch</span></a></h2>";
     echo "</br><h3>Or complete the request on your desktop to download a custom installer.</h3>";
     exit;
 }
