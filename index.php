@@ -31,9 +31,11 @@ if (array_key_exists("url", $_GET)) {
     $url = $_GET["url"];
 }
 
-list($username, $branch, $loading_msg) = explode("/", $url);  # todo: clip these strings at the max length in index (to show up on the webpage)
+$parts = explode("/", $url);
+$branch = isset($parts[0]) ? $parts[0] : "";
+$loading_msg = isset($parts[1]) ? $parts[1] : "";
+$username = "sunnypilot";
 
-$username = substr(strtolower($username), 0, 39);  # max GH username length
 $branch = substr(trim($branch), 0, 255);  # max GH branch
 $branch = $branch == "_" ? "" : $branch;
 $loading_msg = substr(trim($loading_msg), 0, 39);
@@ -57,11 +59,10 @@ $aliases = [new Alias("dragonpilot-community", "release3", ["dragonpilot", "dp"]
             new Alias("sshane", "SA-master", ["shane", "smiskol", "sa", "sshane"], "", "Stock Additions"),
 	    new Alias("sunnyhaibin", "prod-c3", ["sunnypilot", "sp", "sunnyhaibin"], "", "sunnypilot")];
 foreach ($aliases as $al) {
-    if (in_array($username, $al->aliases)) {
-        $username = $al->name;
+    if ($al->name === $username) {
         if ($branch == "") $branch = $al->default_branch;  # if unspecified, use default
         if ($loading_msg == "") $loading_msg = $al->loading_msg;
-        if ($al->repo != "") $repo_name = $al->repo;  # in case the fork's name isn't openpilot and redirection doesn't work
+        if ($al->repo != "") $repo_name = $al->repo;
         break;
     }
 }
@@ -73,13 +74,8 @@ if ($loading_msg == "") {  # if not an alias with custom msg and not specified u
 
 logData();
 
-$build_script = IS_NEOS ? "/build_neos.php" : "/build_agnos.php";
-if (IS_NEOS or IS_AGNOS or IS_WGET) {  # if NEOS or wget serve file immediately. commaai/stock if no username provided
-    if ($username == "") {
-        $username = "commaai";
-        $branch = DEFAULT_STOCK_BRANCH;
-        $loading_msg = "openpilot";
-    }
+$build_script = IS_NEOS ? "build_neos.php" : "build_agnos.php";
+if (IS_NEOS or IS_AGNOS or IS_WGET) {  # if NEOS or wget serve file immediately
     header("Location: " . BASE_DIR . $build_script . "?username=" . $username . "&branch=" . $branch . "&loading_msg=" . $loading_msg);
     return;
 }
@@ -105,10 +101,10 @@ button:active[name="download_agnos"] {border-radius: 4px; border: 5px; padding: 
 echo '</br></br><a href="' . BASE_DIR . '"><h1 style="color: #30323D;">🍴 openpilot fork installer generator-inator 🍴</h1></a>';
 echo '<h3 style="position: absolute; bottom: 0; left: 0; width: 100%; text-align: center;"><a href="https://github.com/sunnypilot/openpilot-installer-generator" style="color: 30323D;">💾 Installer Generator GitHub Repo</a></h3>';
 
-if ($username == "") {
+if ($branch == "") {
     echo '<h3 style="color: #30323D;">🎉 now supports comma three! 🎉<h3>';
     echo "</br><h2>Enter this URL on your device during setup with the format:</h2>";
-    echo "<h2><a href='" . BASE_DIR . "/sunnypilot/release-c3'><span>" . WEBSITE_URL . BASE_DIR . "/username/branch</span></a></h2>";
+    echo "<h2><a href='" . BASE_DIR . "/release-c3'><span>" . WEBSITE_URL . BASE_DIR . "/branch</span></a></h2>";
     echo "</br><h3>Or complete the request on your desktop to download a custom installer.</h3>";
     exit;
 }
