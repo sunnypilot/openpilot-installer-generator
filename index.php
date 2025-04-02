@@ -10,7 +10,7 @@ define("IS_WGET", str_contains(USER_AGENT, "Wget"));
 define("DEFAULT_STOCK_BRANCH", IS_NEOS ? "release2" : "release3");
 
 define("WEBSITE_URL", "https://installer.sunnypilot.ai");
-define("BASE_DIR", "");
+define("BASE_DIR", basename(__DIR__));
 
 function logData() {
     global $url;
